@@ -25,6 +25,7 @@ buttons.forEach((item) => {
     // i really don't like prettier
     else if (display.innerText !== "" && item.getAttribute("data-action") === "result") {
       if (display.innerText.startsWith("0/")) {
+        chrome.storage.local.remove("calculatorResult");
         display.innerText = "Error!";
       } else {
         display.innerText = evaluateExpression(display.innerText);

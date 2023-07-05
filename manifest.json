@@ -1,7 +1,7 @@
 {
   "name": "EasyCalc - Simple Calculator",
   "description": "A simple calculator extension for performing basic arithmetic calculations.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifest_version": 3,
   "icons": {
     "16": "/assets/icons/icon16.png",
