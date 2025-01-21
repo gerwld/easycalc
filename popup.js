@@ -4,61 +4,61 @@ const buttons = document.querySelectorAll("button");
 // Load the previous result from storage
 chrome.storage.local.get("calculatorResult", (data) => {
   const savedResult = data.calculatorResult;
-  display.innerText = savedResult !== undefined ? savedResult : "0";
+  display.value = savedResult !== undefined ? savedResult : "0";
 });
 
 buttons.forEach((item) => {
   item.onclick = () => {
     if (item.getAttribute("data-action") === "clear") {
-      display.innerText = "0";
+      display.value = "0";
 
       // Remove the value from local storage
       chrome.storage.local.remove("calculatorResult");
     }
-    // i really don't like prettier
+
     else if (item.getAttribute("data-action") === "backspace") {
-      let string = display.innerText.toString();
+      let string = display.value.toString();
       if (string.length === 1) {
-        display.innerText = "0";
-      } else display.innerText = string.slice(0, -1);
+        display.value = "0";
+      } else display.value = string.slice(0, -1);
     }
-    // i really don't like prettier
-    else if (display.innerText !== "" && item.getAttribute("data-action") === "result") {
-      if (display.innerText.startsWith("0/")) {
+
+    else if (display.value !== "" && item.getAttribute("data-action") === "result") {
+      if (display.value.startsWith("0/")) {
         chrome.storage.local.remove("calculatorResult");
-        display.innerText = "Error!";
+        display.value = "Error!";
       } else {
-        display.innerText = evaluateExpression(display.innerText);
+        display.value = evaluateExpression(display.value);
       }
     }
-    // i really don't like prettier
-    else if (display.innerText === "0" && item.getAttribute("data-action") === "result") {
-      display.innerText = "Empty!";
-      setTimeout(() => (display.innerText = ""), 2000);
-    }
-    // i really don't like prettier
-    else if (display.innerText === "0" && ["/", "*", "+", "-"].indexOf(item.getAttribute("data-action")) !== -1) {
-      let operator = item.getAttribute("data-action");
-      if (display.innerText.slice(-1) !== operator) display.innerText += operator;
-    }
-    // i really don't like prettier
-    else if (display.innerText === "0") {
-      display.innerText = item.getAttribute("data-action");
+
+    else if (display.value === "0" && item.getAttribute("data-action") === "result") {
+      display.value = "Empty!";
+      setTimeout(() => (display.value = ""), 2000);
     }
 
-    // i really don't like prettier
+    else if (display.value === "0" && ["/", "*", "+", "-"].indexOf(item.getAttribute("data-action")) !== -1) {
+      let operator = item.getAttribute("data-action");
+      if (display.value.slice(-1) !== operator) display.value += operator;
+    }
+
+    else if (display.value === "0") {
+      display.value = item.getAttribute("data-action");
+    }
+
+
     else if (["/", "*", "+", "-"].indexOf(item.getAttribute("data-action")) !== -1) {
       let operator = item.getAttribute("data-action");
-      if (display.innerText.slice(-1) !== operator) display.innerText += operator;
+      if (display.value.slice(-1) !== operator) display.value += operator;
     }
 
-    // i really don't like prettier
+
     else {
-      display.innerText += item.getAttribute("data-action");
+      display.value += item.getAttribute("data-action");
     }
 
     // Save the current display value to storage
-    const currentValue = display.innerText;
+    const currentValue = display.value;
     if (currentValue !== "Error!" && currentValue !== "Empty!") {
       chrome.storage.local.set({ calculatorResult: currentValue });
     }
